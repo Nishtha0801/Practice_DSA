@@ -11,7 +11,7 @@ public class l001{
     }
 
     public static int size(TreeNode root){
-        return root == null?0: size(root.left)+size(root.right)+1;
+        return root == null? 0 : size(root.left) + size(root.right)+1;
     }
 
     public static int height(TreeNode root){
