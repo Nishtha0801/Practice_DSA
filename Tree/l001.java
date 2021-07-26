@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 public class l001{
     public static class TreeNode{
         int val = 0;
@@ -176,6 +177,98 @@ public class l001{
         return -1;
     }
 
+    public static void burningTreeNode(TreeNode root, int time, TreeNode blockNode, ArrayList<ArrayList<Integer>> ans){
+        if (root == null || root == blockNode){
+            return;
+        }
+        if(time == ans.size()){
+            ans.add(new ArrayList<>());
+        }
+        ans.get(time).add(root.val);
+        burningTreeNode(root.left, time+1, blockNode, ans);
+        burningTreeNode(root.right, time+1, blockNode, ans);
+    }
+
+    public static int burningTree(TreeNode root, int fireNode, ArrayList<ArrayList<Integer>> ans){
+        if(root == null){
+            return -1;
+        }
+        if(root.val == fireNode){
+            burningTreeNode(root, 0, null, ans);
+            return 1;
+        }
+        int lt = burningTree(root.left, fireNode, ans);
+        if(lt != -1){
+            burningTreeNode(root, lt, root.left, ans);
+            return lt+1;
+        }
+        int rt = burningTree(root.right, fireNode, ans);
+        if(rt != -1){
+            burningTreeNode(root, rt, root.right, ans);
+        }
+        return -1;
+    }
+
+    public static void burningTree(TreeNode root, int data) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        burningTree(root, data, ans);
+    }
+
+    public static void burningTreeNodeWithWater(TreeNode root, int time, TreeNode blockNode, HashSet<Integer> waterSet, ArrayList<ArrayList<Integer>>ans){
+        if(root == null || root == blockNode || waterSet.contains(root.val)){
+            return;
+        }
+        if(time == ans.size()){
+            ans.add(new ArrayList<>());
+        }
+        ans.get(time).add(root.val);
+        burningTreeNodeWithWater(root.left, time+1, blockNode,waterSet, ans);
+        burningTreeNodeWithWater(root.right, time+1, blockNode, waterSet, ans);
+    }
+
+    public static int burningTreeWithWater(TreeNode root, int fireNode, HashSet<Integer> waterSet, ArrayList<ArrayList<Integer>> ans){
+        if(root == null){
+            return -1;
+        }
+        if(root.val == fireNode){
+            if(!waterSet.contains(root.val)){
+                burningTreeNodeWithWater(root,0,null,waterSet,ans);
+                return 1;
+            }
+            return -2; // fire node is present but it has water
+        }
+        int lt = burningTreeWithWater(root.left, fireNode, waterSet, ans);
+        if(lt>0){
+            if(!waterSet.contains(root.val)){
+                burningTreeNodeWithWater(root, lt, root.left, waterSet, ans);
+                return lt+1;
+            }
+            return -2;
+        }
+        if(lt == -2){
+            return -2;
+        }
+        int rt = burningTreeWithWater(root.right, fireNode, waterSet, ans);
+        if(rt>0){
+            if(!waterSet.contains(root.val)){
+                burningTreeNodeWithWater(root, rt, root.right, waterSet, ans);
+                return rt+1;
+            }
+            return -2;
+        }
+        if(rt == -2){
+            return -2;
+        }
+        return -1;
+    }
+
+    public static void burningTreeWithWater(TreeNode root, int data) {
+        HashSet<Integer> waterSet = new HashSet<>(); // unordered_set<int> map;
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+
+        burningTreeWithWater(root, data, waterSet, ans);
+        System.out.println(ans);
+    }
 
     public static void main(String[] args){
 
