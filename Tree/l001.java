@@ -270,6 +270,47 @@ public class l001{
         System.out.println(ans);
     }
 
+    TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q){
+        ArrayList<TreeNode> list1 = new ArrayList<>();
+        ArrayList<TreeNode> list2 = new ArrayList<>();
+        nodeToRootPath_(root, p.val, list1);
+        nodeToRootPath_(root, q.val, list2);
+
+        int i = list1.size()-1;
+        int j = list2.size()-1;
+        TreeNode LCA = null;
+        while(i>=0 && j>=0){
+            if(list1[i]!=list1[j]){
+                break;
+            }
+            LCA = list1[i];
+            i--;
+            j--;
+        }
+        return LCA;
+    }
+
+    TreeNode LCA = null;
+    boolean lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q){
+        if(root == null){
+            return false;
+        }
+        boolean selfPresent = (root == p || root == q);
+        boolean leftPresent = lowestCommonAncestor2(root.left, p, q);
+        if(LCA != null){
+            return true;
+        }
+        boolean rightPresent = lowestCommonAncestor2(root.right, p, q);
+        if(LCA != null){
+            return true;
+        }
+
+        if((leftPresent && rightPresent) || (leftPresent && selfPresent) || (rightPresent && selfPresent)){
+            LCA = root;
+        }
+        return leftPresent || rightPresent || selfPresent;
+    }
+
     public static void main(String[] args){
 
     }

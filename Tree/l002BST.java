@@ -96,6 +96,7 @@ public class l002BST{
         return ans;
     }
 
+    // p and q may or may not exist
     public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q){
         TreeNode LCA = null;
         TreeNode curr = root;
