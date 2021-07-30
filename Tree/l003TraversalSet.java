@@ -225,4 +225,41 @@ public class l003TraversalSet{
         }
         return st.removeFirst().val;
     }
+    // to circular doubly linked list
+    public TreeNode cdll(TreeNode root){
+        TreeNode dummy = new TreeNode(-1);
+        TreeNode curr = root;
+        TreeNode prev = dummy;
+        while(curr != null){
+            TreeNode left = curr.left;
+            if(left == null){
+                prev.right = curr;
+                curr.left = prev;
+                prev = prev.right;
+
+                curr = curr.right;
+            }
+            else{
+                TreeNode rightMostNode = getRightMostNode(left, curr);
+                if(rightMostNode.right == null){
+                    rightMostNode.right = curr;
+                    curr = curr.left;
+                }
+                else{
+                    rightMostNode.right = null;
+                    prev.right = curr;
+                    curr.left = prev;
+                    prev = prev.right;
+
+                    curr = curr.right;
+                }
+            }
+        }
+        TreeNode head = dummy.right;
+        dummy.right = head.left = null;
+
+        head.left = prev; // to make the dll circular
+        prev.right = head;
+        return head;
+    }
 }
