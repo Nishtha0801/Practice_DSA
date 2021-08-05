@@ -206,4 +206,119 @@ public class l004Construction{
 
         return root;
     }
+
+    public static TreeNode buildTreeFromPreIn(int[] preorder, int psi, int pei, int[] inorder, int isi, int iei){
+        if(psi > pei){
+            return null;
+        }
+
+        int idx = isi;
+        while(inorder[idx] != preorder[psi]){
+            idx++;
+        }
+        int tnel = idx - isi;
+        TreeNode root = new TreeNode(preorder[psi]);
+
+        root.left = buildTree(preorder, psi+1, psi+tnel, inorder, isi, idx - 1);
+        root.right = buildTree(preorder, psi+tnel+1, pei, inorder, idx+1, iei);
+
+        return root;
+    }
+
+    public static TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        return buildTree(preorder, 0, n - 1, inorder, 0, n - 1);
+    }
+
+    public static TreeNode buildTreeFromPostAndIn(int[] postOrder, int psi, pei, int[] inorder, int isi, int iei){
+        if(psi > pei){
+            return null;
+        }
+        int idx = isi;
+        while(inorder[idx] != postOrder[pei]){
+            idx++;
+        }
+        int tnel = idx - isi;
+        TreeNode root = new TreeNode(postOrder[pei]);
+
+        root.left = buildTreeFromPostAndIn(postOrder, psi, psi+tnel-1, inorder, isi, idx-1);
+        root.right = buildTreeFromPostAndIn(postOrder, psi + tnel, pei-1, inorder, idx+1, iei);
+
+        return root;
+    }
+    public static TreeNode buildTreeFromPostAndIn(int[] inorder, int[] postorder) {
+        int n = inorder.length;
+        return buildTreeFromPostAndIn(postorder, 0, n - 1, inorder, 0, n - 1);
+    }
+
+    public static TreeNode constructFromPrePost(int[] postOrder, int ppsi, int ppei, int[] preOrder, int psi, int pei) {
+        if (psi > pei)
+            return null;
+
+        TreeNode root = new TreeNode(preOrder[psi]);
+        if (psi == pei)
+            return root;
+
+        int idx = ppsi;
+        while (postOrder[idx] != preOrder[psi + 1])
+            idx++;
+
+        int tnel = idx - ppsi + 1;
+        root.left = constructFromPrePost(postOrder, ppsi, ppsi + tnel - 1, preOrder, psi + 1, psi + tnel);
+        root.right = constructFromPrePost(postOrder, ppsi + tnel, pei - 1, preOrder, psi + tnel + 1, pei);
+
+        return root;
+    }
+
+    public static TreeNode constructFromPrePost(int[] preOrder, int[] postorder) {
+        int n = postorder.length;
+        return constructFromPrePost(postorder, 0, n - 1, preOrder, 0, n - 1);
+    }
+
+    public class CodecBTree {
+
+        public void serialize(TreeNode root, StringBuilder sb) {
+            if (root == null) {
+                sb.append("# ");
+                return;
+            }
+
+            sb.append(root.val + " ");
+            serialize(root.left, sb);
+            serialize(root.right, sb);
+        }
+
+        public String serialize(TreeNode root) {
+            if (root == null)
+                return "";
+            StringBuilder sb = new StringBuilder();
+            serialize(root, sb);
+
+            return sb.toString();
+        }
+
+        int idx = 0;
+
+        public TreeNode deserialize(String[] arr) {
+            if (idx >= arr.length || arr[idx].equals("#")) {
+                idx++;
+                return null;
+            }
+
+            TreeNode root = new TreeNode(Integer.parseInt(arr[idx++]));
+            root.left = deserialize(arr);
+            root.right = deserialize(arr);
+
+            return root;
+        }
+
+        public TreeNode deserialize(String data) {
+            if (data.length() == 0)
+                return null;
+
+            idx = 0;
+            String[] arr = data.split(" ");
+            return deserialize(arr);
+        }
+    }
 }
