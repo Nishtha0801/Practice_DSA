@@ -321,4 +321,112 @@ public class l004Construction{
             return deserialize(arr);
         }
     }
+    public class BSTPair{
+        boolean isBal = true;
+        int h = -1;
+
+        boolean isBST = true;
+        int min = (int)1e9;
+        int max = -(int)1e9;
+
+        int size = 0;
+        TreeNode largestRoot = null;
+    }
+
+    public BSTPair isBalanced_(TreeNode root){
+        if(root == null){
+            BSTPair base = new BSTPair();
+            return base;
+        }
+        BSTPair lp = isBalanced_(root.left);
+        BSTPair rp = isBalanced_(root.right);
+
+        BSTPair myPair = new BSTPair();
+        myPair.isBal = lp.isBal && rp.isBal;
+        if(myPair.isBal && abs(lp.h - rp.h) < 2){
+            myPair.h = Math.max(lp.h, rp.h) + 1;
+        }
+        else{
+            myPair.isBal = false;
+        }
+        return myPair;
+    }
+    bool isBalanced(TreeNode root){
+        return isBalanced_(root).isBal;
+    }
+
+    BSTPair largestBST_(TreeNode root){
+        if(root == null){
+            BSTPair base = new BSTPair();
+            return base;
+        }
+        BSTPair lp = largestBST_(root.left);
+        BSTPair rp = largestBST_(root.right);
+
+        BSTPair myPair = new BSTPair();
+        myPair.isBST = false;
+        if(lp.isBST && rp.isBST && lp.max < root.val && root.val < rp.min){
+            myPair.isBST = true;
+            myPair.max = Math.max(root.val, rp.max);
+            myPair.min = Math.min(root.val, rp.min);
+            myPair.size = lp.size + rp.size + 1;
+            myPair.largestRoot = root;
+        }
+        else{
+            if(lp.size > rp.size){
+                myPair.size = lp.size;
+                myPair.largestRoot = lp.largestRoot;
+            }
+            else{
+                myPair.size = rp.size;
+                myPair.largestRoot = rp.largestRoot;
+            }
+        }
+        return myPair;
+    }
+
+    TreeNode largestBST(TreeNode root){
+        return largestBST_(root).largestRoot;
+    }
+    // pred and successor for binary tree.
+    public static void findPresuc(TreeNode root, int key){
+        TreeNode curr = root;
+        TreeNode prev = null;
+        TreeNode pred = null;
+        TreeNode succ = null;
+
+        while(curr != null){
+            TreeNode left = curr.left;
+            if(left == null){
+                if(curr.val == key){
+                    pred = prev;
+                }
+                if(prev != null && prev.val = key){
+                    succ = curr;
+                }
+                prev = curr;
+                curr = curr.right;
+            } else {
+                TreeNode rightMostNode = getRightMostNode(left, curr); 
+                if(rightMostNode.right == null){
+                    rightMostNode.right = curr;
+                    curr = curr.left;
+                }
+                else{
+                    rightMostNode.right = null;
+
+                    if(curr.val == key){
+                        pred = prev;
+                    }
+                    if(prev != null && prev.val == key){
+                        succ = curr;
+                    }
+                    prev = curr;
+                    curr = curr.right;
+                }
+            }
+        }
+
+    }
+    
 }
