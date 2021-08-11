@@ -115,5 +115,101 @@ public class DFS_Questions{
                 }
             }
         }
-    }
+
+        // Journey To The Moon
+        public static int dfs(int src, ArrayList<ArrayList<Integer>> graph, boolean[] vis){
+            int size = 1;
+            vis[src] = true;
+            for(int v : graph[src]){
+                if(!vis[v]){
+                    size+= dfs(v, graph, vis);
+                }
+            }
+            return size;
+        }
+        public static long journeyToMoon(int n, int[][] edges){
+            ArrayList<ArrayList<Integer>> graph = new ArrayList<>(N);
+            for(int[] e : edges){
+                graph[e[0]].add(e[1]);
+                graph[e[1]].add(e[0]); 
+            }
+            boolean[] vis = new boolean[n];
+            long sum = 0, ans = 0;
+            for(int i=0;i<n;i++){
+                if(!vis[i]){
+                    int size = dfs(i, graph, vis);
+                    ans += size*sum;
+                    sum+=size;
+                }
+            }
+            return ans;
+        }
+       
+        // 207 
+        boolean canFinish(int N, int[][] prerequisites){
+            ArrayList<Integer>[] graph = new ArrayList[N];
+            int[] indegree = new int[N];
+            for(int i=0; i<N; i++){
+                graph[i] = new ArrayList<>();
+            }
+            for(int[] e : prerequisites){
+                graph[e[0]].add(e[1]);
+                indegree[e[1]]++;
+            }
+            LinkedList<Integer> que = new LinkedList<>();
+            for(int i=0;i<N;i++){
+                if(indegree[i]==0){
+                    que.addLast(i);
+                }
+            }
+
+            int vtxCount = 0;
+            while(que.size() != 0){
+                int vtx = que.removeFirst();
+                vtxCount++;
+                for(int v : graph[vtx]){
+                    if(--indegree[v] == 0){
+                        que.addLast(v);
+                    }
+                }
+            }
+            return vtxCount == N;
+        }
+
+        public int[] findOrder(int N, int[][] prerequisites) {
+            ArrayList<Integer>[] graph = new ArrayList[N];
+            int[] indegree = new int[N];
+            for(int i=0; i<N; i++){
+                graph[i] = new ArrayList<>();
+            }
+            for(int[] e : prerequisites){
+                graph[e[1]].add(e[0]);
+                indegree[e[0]]++;
+            }
+            LinkedList<Integer> que = new LinkedList<>();
+            for(int i=0;i<N;i++){
+                if(indegree[i]==0){
+                    que.addLast(i);
+                }
+            }
+            
+            ArrayList<Integer> ans = new ArrayList<>();
+            while(que.size() != 0){
+                int vtx = que.removeFirst();
+                ans.add(vtx);
+                for(int v : graph[vtx]){
+                    if(--indegree[v] == 0){
+                        que.addLast(v);
+                    }
+                }
+            }
+            if(ans.size() != N){
+                return new int[0];
+            }
+            int[] res = new int[ans.size()];
+            for(int i=0;i<ans.size();i++){
+                res[i] = ans.get(i);
+            }
+            return res;
+        }
 }
