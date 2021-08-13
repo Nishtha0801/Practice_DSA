@@ -123,6 +123,43 @@ public class l002_directed{
         }
     }
 
+    // detect Cycle
+    public static boolean TopoDFS(int src, int[]vis, ArrayList<Integer> ans){
+        vis[src] = 1;
+        for(Integer e : graph[src]){
+            if(vis[e] == 0){
+                if(TopoDFS(e,vis, ans)){
+                    return true;
+                }
+                
+            } else if(vis[e] == 1){
+                return true; // Cycle detected - because It is visited as well as part of my path.
+            }
+        }
+        ans.add(src);
+        vis[src] = 2; // visited but not a part of my path.
+        return false;
+    }
+
+    public static void TopoDFS(){
+        ArrayList<Integer> ans = new ArrayList<>();
+        int[] vis = new boolean[N];
+        boolean isCycle = false;
+        for(int i=0;i<N;i++){
+            if(vis[i] == 0){
+                if(TopoDFS(i,vis,ans)){
+                    isCycle = true;
+                    break;
+                }
+            }
+        }
+        if(!isCycle){
+            System.out.println(ans);
+        } else{
+            System.out.println("Cycle");
+        }
+    }
+
     public static void constructGraph() {
         int V = 7;
         ArrayList<Edge>[] graph = new ArrayList[V];
