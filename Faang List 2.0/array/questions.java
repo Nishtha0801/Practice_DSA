@@ -97,3 +97,54 @@ public int[] sortedSquares(int[] nums) {
     }
     return ans;
 }
+
+//leetcode 665
+public boolean checkPossibility(int[] nums) {
+    int n = nums.length;
+    int wrong = 0;
+    for(int i = n-1;i>0;i--){
+        if(i-1 >=0 && nums[i] < nums[i-1]){
+            wrong++;
+             if(i-1>=0 && i+1 < n && nums[i+1] < nums[i-1]){
+                 nums[i-1] = nums[i];
+              }
+            if( i+1 < n && nums[i+1] > nums[i-1]){
+                nums[i] = nums[i-1];
+            }
+        }
+        
+    }
+    if(wrong <= 1){
+        return true;
+    }
+    return false;
+}
+// leetcode 169
+public int majorityElement(int[] nums) {
+    HashMap<Integer,Integer>map = new HashMap<>();
+    int req = nums.length/2;
+    for(int i=0;i<nums.length;i++){
+        map.put(nums[i], map.getOrDefault(nums[i],0)+1);
+    }
+    for(int x : map.keySet()){
+        if(map.get(x)>req){
+            return x;
+        }
+    }
+    return -1;
+}
+//leetcode 229
+public List<Integer> majorityElement(int[] nums) {
+    HashMap<Integer,Integer>map = new HashMap<>();
+    List<Integer> ans = new ArrayList<>();
+    int req = nums.length/3;
+    for(int i=0;i<nums.length;i++){
+        map.put(nums[i], map.getOrDefault(nums[i],0)+1);
+    }
+    for(int x : map.keySet()){
+        if(map.get(x)>req){
+            ans.add(x);
+        }
+    }
+    return ans;
+}
