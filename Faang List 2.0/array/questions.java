@@ -148,3 +148,185 @@ public List<Integer> majorityElement(int[] nums) {
     }
     return ans;
 }
+// leetcode 904
+public int totalFruit(int[] tree) {
+    int n = tree.length;
+    int si = 0;
+    int ei = 0;
+    int count = 0;
+    int len = 0;
+    int[] freq = new int[100000 + 1];
+    while(ei<n){
+        if(freq[tree[ei++]]++ == 0){
+            count++;
+        }
+        while(count > 2){
+             if(freq[tree[si++]]-- == 1){
+                count--;
+            }
+        }
+        len = Math.max(len, ei-si);
+    }
+    return len;
+}
+// leetcode 930
+public int atMostSum(int[] nums, int goal){
+    int n = nums.length;
+    int si=0;
+    int ei=0;
+    int sum = 0;
+    int count=0;
+    while(ei<n){
+        sum+=nums[ei++];
+        while(sum > goal){
+            sum-=nums[si++];
+        }
+        count+=ei-si;
+    }
+    return count;
+}
+public int numSubarraysWithSum(int[] nums, int goal) {
+    int required1 = atMostSum(nums, goal);
+    int required2 = 0;
+    
+    if(goal>0){
+        required2 = atMostSum(nums, goal-1);
+    }
+    return required1 - required2;
+}
+
+//leetcode 485
+public int findMaxConsecutiveOnes(int[] nums) {
+    int n = nums.length;
+    int si = 0;
+    int ei = 0;
+    int count = 0;
+    int len = 0;
+    while(ei<n){
+        if(nums[ei++] == 0){
+            count++;
+        }
+        while(count > 0){
+            if(nums[si++] == 0){
+                count--;
+            }
+        }
+        len = Math.max(len,ei-si);
+    }
+    return len;
+}
+//leetcode 487
+public int findMaxConsecutiveOnes(int[] nums) {
+    int n = nums.length;
+   int si = 0;
+   int ei = 0;
+   int count = 0;
+   int len = 0;
+   while(ei<n){
+       if(nums[ei++] == 0){
+           count++;
+       }
+       while(count > 1){
+           if(nums[si++] == 0){
+               count--;
+           }
+       }
+       len = Math.max(len,ei-si);
+   }
+   return len;
+}
+// leetcode 1004
+public int longestOnes(int[] nums, int k) {
+       
+    int n = nums.length;
+   int si = 0;
+   int ei = 0;
+   int count = 0;
+   int len = 0;
+   while(ei<n){
+       if(nums[ei++] == 0){
+           count++;
+       }
+       while(count > k){
+           if(nums[si++] == 0){
+               count--;
+           }
+       }
+       len = Math.max(len,ei-si);
+   }
+   return len;
+
+}
+//leetcode 974
+public int subarraysDivByK(int[] arr, int k) {
+    int n = arr.length;
+    int count = 0;
+    int sum = 0;
+    
+    HashMap<Integer, Integer>map = new HashMap<>();
+    map.put(0,1);
+    int i = 0;
+    while(i<n){
+        sum+=arr[i++];
+        int rem = (sum%k + k)%k;
+        if(map.containsKey(rem)){
+            count+=map.get(rem);
+        }
+      
+        map.put(rem, map.getOrDefault(rem,0) + 1);
+        
+    }
+    return count;
+}
+// https://practice.geeksforgeeks.org/problems/count-subarrays-with-equal-number-of-1s-and-0s-1587115620/1#
+static int countSubarrWithEqualZeroAndOne(int arr[], int n)
+    {
+         
+        int count = 0;
+        int sum = 0;
+        
+        HashMap<Integer, Integer>map = new HashMap<>();
+        map.put(0,1);
+        int i = 0;
+        while(i<n){
+            sum+=arr[i];
+            if(arr[i]==0){
+                sum-=1;
+            }
+            i++;
+            if(map.containsKey(sum)){
+                count+=map.get(sum);
+            }
+          
+            map.put(sum, map.getOrDefault(sum,0) + 1);
+            
+        }
+        return count;
+    
+    }
+    // leetcode 525
+    public int findMaxLength(int[] arr) {
+        int n = arr.length;
+        int count = 0;
+        int sum = 0;
+        
+        HashMap<Integer, Integer>map = new HashMap<>();
+        map.put(0,-1);
+        int i = 0;
+        while(i<n){
+            sum+=arr[i];
+            if(arr[i]==0){
+                sum-=1;
+            }
+            
+            map.putIfAbsent(sum, i);
+           
+            if(map.containsKey(sum)){
+                count=Math.max(count, i-map.get(sum));
+            }
+           i++;
+          
+            
+        }
+        return count;
+    }
