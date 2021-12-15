@@ -385,3 +385,80 @@ static int countSubarrWithEqualZeroAndOne(int arr[], int n)
         }
         return boatCount;
     }
+    //leetcode 628
+    public int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        int a  = nums[nums.length-1]*nums[nums.length-2]*nums[nums.length-3];
+        int b = nums[0]*nums[1]*nums[nums.length - 1];
+        
+        return Math.max(a,b);
+    }
+    public int maximumProduct(int[] nums) {
+        int max1 = Integer.MIN_VALUE;
+        int max2 = max1;
+        int max3 = max1;
+        
+        int min1 = Integer.MAX_VALUE;
+        int min2 = min1;
+        for(int i=0;i<nums.length;i++){
+            int val = nums[i];
+            if(val>=max1){
+                max3 = max2;
+                max2 = max1;
+                max1 = val;
+            } else if(val >= max2){
+                max3 = max2;
+                max2 = val;
+            } else if(val >= max3){
+                max3 = val;
+            }
+            
+            if(val<=min1){
+                min2 = min1;
+                min1 = val;
+            } else if(val<=min2){
+                min2 = val;
+            }
+        }
+        return Math.max(max1*max2*max3, min1*min2*max1);
+    }
+    // leetcode 1
+    public int[] twoSum(int[] arr, int tar) {
+        HashMap<Integer,Integer>map = new HashMap<>();
+     for(int i=0;i<arr.length;i++){
+         if(map.containsKey(tar - arr[i])){
+             return new int[]{map.get(tar-arr[i]),i};
+         }
+         map.put(arr[i], i);
+      }
+         return new int[0];
+     }
+     // leetcode 769
+     public int maxChunksToSorted(int[] arr) {
+        int max = 0;
+        int ans = 0;
+        for(int i=0;i<arr.length;i++){
+            max = Math.max(max, arr[i]);
+            if(i==max){
+                ans++;
+            }
+        }
+        return ans;
+    }
+    // leetcode 768
+    public int maxChunksToSorted(int[] arr) {
+        int[] rmin = new int[arr.length + 1];
+        int leftMax = Integer.MIN_VALUE; 
+        int count = 0;
+        rmin[rmin.length-1] = Integer.MAX_VALUE;
+        for(int i = arr.length-1;i>=0;i--){
+            rmin[i] = Math.min(rmin[i+1], arr[i]);
+        }
+        for(int i = 0;i<arr.length;i++){
+             leftMax = Math.max(leftMax, arr[i]);
+            if(leftMax <= rmin[i+1]){
+                count++;
+            }
+        }
+        return count;
+    }
