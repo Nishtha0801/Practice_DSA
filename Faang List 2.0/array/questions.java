@@ -330,3 +330,58 @@ static int countSubarrWithEqualZeroAndOne(int arr[], int n)
         }
         return count;
     }
+    // leetcode 556
+    public int nextGreaterElement(int n) {
+        
+        String s = Integer.toString(n);
+        char[] arr = s.toCharArray();
+        int i = arr.length-2;
+        while(i>=0 && arr[i] >= arr[i+1]){
+            i--;
+        }
+        if(i == -1){
+            return -1;
+        }
+        int swapWith = -1;
+        for(int j = arr.length-1;j>i;j--){
+            if(arr[j] > arr[i]){
+                swapWith = j;
+                break;
+            }
+        }
+        char temp = arr[i];
+        arr[i] = arr[swapWith];
+        arr[swapWith] = temp;
+        
+        String ans = "";
+        for(int k=0;k<=i;k++){
+            ans+=arr[k];
+        }
+        for(int l=arr.length-1;l>i;l--){
+            ans+=arr[l];
+        }
+        long val = Long.valueOf(ans);
+        return val <= Integer.MAX_VALUE ? (int) val : -1;
+        
+    }
+    //leetcode 881
+     public int numRescueBoats(int[] arr, int tar) {
+        Arrays.sort(arr);
+        int i = 0;
+        int j = arr.length - 1;
+        int boatCount = 0;
+        
+        while(i<=j){
+            int sum = arr[i] + arr[j];
+            if(sum<=tar){
+                boatCount++;
+                i++;
+                j--;
+            }
+            else if(sum>tar){
+                boatCount++;
+                j--;
+            }
+        }
+        return boatCount;
+    }
